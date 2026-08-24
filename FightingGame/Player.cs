@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 
 namespace FightingGame;
@@ -23,15 +25,21 @@ public class Player
     public bool UsesKeyboard { get; }
     public Color Color { get; }
     public Stickman Stickman { get; } = new();
+    public int Wins { get; set; }
+
+    // The gunshot sample set this player was randomly handed when they joined - kept for the whole
+    // match so their gun has a consistent voice, distinct from other players' guns.
+    public IReadOnlyList<SoundEffect> GunSounds { get; }
 
     // Starts true so the same button press that joins the player doesn't also register as a jump.
     private bool _jumpWasDown = true;
 
-    public Player(PlayerIndex? controllerIndex, bool usesKeyboard, Color color, Vector2 startPosition)
+    public Player(PlayerIndex? controllerIndex, bool usesKeyboard, Color color, Vector2 startPosition, IReadOnlyList<SoundEffect> gunSounds)
     {
         ControllerIndex = controllerIndex;
         UsesKeyboard = usesKeyboard;
         Color = color;
+        GunSounds = gunSounds;
         Stickman.Position = startPosition;
     }
 
